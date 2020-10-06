@@ -1,32 +1,33 @@
-/* eslint-disable */
+'use strict';
 
-import * as utils from './utils';
-import * as formats from './formats';
+// @ts-nocheck
 
+var utils = require('./utils');
+var formats = require('./formats');
 var has = Object.prototype.hasOwnProperty;
 
 var arrayPrefixGenerators = {
-    brackets: function brackets(prefix: any) {
+    brackets: function brackets(prefix) {
         return prefix + '[]';
     },
     comma: 'comma',
-    indices: function indices(prefix: any, key: any) {
+    indices: function indices(prefix, key) {
         return prefix + '[' + key + ']';
     },
-    repeat: function repeat(prefix: any) {
+    repeat: function repeat(prefix) {
         return prefix;
     }
 };
 
 var isArray = Array.isArray;
 var push = Array.prototype.push;
-var pushToArray = function (arr: any, valueOrArray: any) {
+var pushToArray = function (arr, valueOrArray) {
     push.apply(arr, isArray(valueOrArray) ? valueOrArray : [valueOrArray]);
 };
 
 var toISO = Date.prototype.toISOString;
 
-const defaultFormat = formats.default;
+var defaultFormat = formats['default'];
 var defaults = {
     addQueryPrefix: false,
     allowDots: false,
@@ -40,14 +41,14 @@ var defaults = {
     formatter: formats.formatters[defaultFormat],
     // deprecated
     indices: false,
-    serializeDate: function serializeDate(date: any) {
+    serializeDate: function serializeDate(date) {
         return toISO.call(date);
     },
     skipNulls: false,
     strictNullHandling: false
-} as any;
+};
 
-var isNonNullishPrimitive = function isNonNullishPrimitive(v: any) {
+var isNonNullishPrimitive = function isNonNullishPrimitive(v) {
     return typeof v === 'string'
         || typeof v === 'number'
         || typeof v === 'boolean'
@@ -56,19 +57,19 @@ var isNonNullishPrimitive = function isNonNullishPrimitive(v: any) {
 };
 
 var stringify = function stringify(
-    object: any,
-    prefix: any,
-    generateArrayPrefix: any,
-    strictNullHandling: any,
-    skipNulls: any,
-    encoder: any,
-    filter: any,
-    sort: any,
-    allowDots: any,
-    serializeDate: any,
-    formatter: any,
-    encodeValuesOnly: any,
-    charset: any
+    object,
+    prefix,
+    generateArrayPrefix,
+    strictNullHandling,
+    skipNulls,
+    encoder,
+    filter,
+    sort,
+    allowDots,
+    serializeDate,
+    formatter,
+    encodeValuesOnly,
+    charset
 ) {
     var obj = object;
     if (typeof filter === 'function') {
@@ -76,7 +77,7 @@ var stringify = function stringify(
     } else if (obj instanceof Date) {
         obj = serializeDate(obj);
     } else if (generateArrayPrefix === 'comma' && isArray(obj)) {
-        obj = utils.maybeMap(obj, function (value: any) {
+        obj = utils.maybeMap(obj, function (value) {
             if (value instanceof Date) {
                 return serializeDate(value);
             }
@@ -100,7 +101,7 @@ var stringify = function stringify(
         return [formatter(prefix) + '=' + formatter(String(obj))];
     }
 
-    var values = [] as any[];
+    var values = [];
 
     if (typeof obj === 'undefined') {
         return values;
@@ -149,7 +150,7 @@ var stringify = function stringify(
     return values;
 };
 
-var normalizeStringifyOptions = function normalizeStringifyOptions(opts: any) {
+var normalizeStringifyOptions = function normalizeStringifyOptions(opts) {
     if (!opts) {
         return defaults;
     }
@@ -170,7 +171,7 @@ var normalizeStringifyOptions = function normalizeStringifyOptions(opts: any) {
         }
         format = opts.format;
     }
-    var formatter = formats.formatters[format as keyof typeof formats.formatters];
+    var formatter = formats.formatters[format];
 
     var filter = defaults.filter;
     if (typeof opts.filter === 'function' || isArray(opts.filter)) {
@@ -195,7 +196,7 @@ var normalizeStringifyOptions = function normalizeStringifyOptions(opts: any) {
     };
 };
 
-export default function (object: any, opts: any) {
+export default function (object, opts) {
     var obj = object;
     var options = normalizeStringifyOptions(opts);
 
@@ -210,7 +211,7 @@ export default function (object: any, opts: any) {
         objKeys = filter;
     }
 
-    const keys = [] as any[];
+    var keys = [];
 
     if (typeof obj !== 'object' || obj === null) {
         return '';
@@ -225,7 +226,7 @@ export default function (object: any, opts: any) {
         arrayFormat = 'indices';
     }
 
-    var generateArrayPrefix = arrayPrefixGenerators[arrayFormat as keyof typeof arrayPrefixGenerators];
+    var generateArrayPrefix = arrayPrefixGenerators[arrayFormat];
 
     if (!objKeys) {
         objKeys = Object.keys(obj);

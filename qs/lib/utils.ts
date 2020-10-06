@@ -1,9 +1,11 @@
-/* eslint-disable */
+'use strict';
 
-const has = Object.prototype.hasOwnProperty;
-const isArray = Array.isArray;
+// @ts-nocheck
 
-const hexTable = (function () {
+var has = Object.prototype.hasOwnProperty;
+var isArray = Array.isArray;
+
+var hexTable = (function () {
     var array = [];
     for (var i = 0; i < 256; ++i) {
         array.push('%' + ((i < 16 ? '0' : '') + i.toString(16)).toUpperCase());
@@ -12,7 +14,7 @@ const hexTable = (function () {
     return array;
 }());
 
-function compactQueue(queue: any[]) {
+var compactQueue = function compactQueue(queue) {
     while (queue.length > 1) {
         var item = queue.pop();
         var obj = item.obj[item.prop];
@@ -29,9 +31,9 @@ function compactQueue(queue: any[]) {
             item.obj[item.prop] = compacted;
         }
     }
-}
+};
 
-export function arrayToObject(source: string | any[], options: { plainObjects: any; }) {
+export var arrayToObject = function arrayToObject(source, options) {
     var obj = options && options.plainObjects ? Object.create(null) : {};
     for (var i = 0; i < source.length; ++i) {
         if (typeof source[i] !== 'undefined') {
@@ -40,9 +42,10 @@ export function arrayToObject(source: string | any[], options: { plainObjects: a
     }
 
     return obj;
-}
+};
 
-export function merge(target: any, source: any, options?: any) {
+export var merge = function merge(target, source, options) {
+    /* eslint no-param-reassign: 0 */
     if (!source) {
         return target;
     }
@@ -96,16 +99,16 @@ export function merge(target: any, source: any, options?: any) {
         }
         return acc;
     }, mergeTarget);
-}
+};
 
-export function assign(target: any, source: any) {
+export var assign = function assignSingleSource(target, source) {
     return Object.keys(source).reduce(function (acc, key) {
         acc[key] = source[key];
         return acc;
     }, target);
-}
+};
 
-export function decode(str: any, _decoder: any, charset: any) {
+export var decode = function (str, decoder, charset) {
     var strWithoutPlus = str.replace(/\+/g, ' ');
     if (charset === 'iso-8859-1') {
         // unescape never throws, no try...catch needed:
@@ -117,9 +120,9 @@ export function decode(str: any, _decoder: any, charset: any) {
     } catch (e) {
         return strWithoutPlus;
     }
-}
+};
 
-export function encode(str: any, _defaultEncoder: any, charset: any) {
+export var encode = function encode(str, defaultEncoder, charset) {
     // This code was originally written by Brian White (mscdex) for the io.js core querystring library.
     // It has been adapted here for stricter adherence to RFC 3986
     if (str.length === 0) {
@@ -180,10 +183,10 @@ export function encode(str: any, _defaultEncoder: any, charset: any) {
     }
 
     return out;
-}
+};
 
-export function compact(value: any) {
-    var queue = [{ obj: { o: value }, prop: 'o' }] as any;
+export var compact = function compact(value) {
+    var queue = [{ obj: { o: value }, prop: 'o' }];
     var refs = [];
 
     for (var i = 0; i < queue.length; ++i) {
@@ -204,25 +207,25 @@ export function compact(value: any) {
     compactQueue(queue);
 
     return value;
-}
+};
 
-export function isRegExp(obj: any) {
+export var isRegExp = function isRegExp(obj) {
     return Object.prototype.toString.call(obj) === '[object RegExp]';
-}
+};
 
-export function isBuffer(obj: any) {
+export var isBuffer = function isBuffer(obj) {
     if (!obj || typeof obj !== 'object') {
         return false;
     }
 
     return !!(obj.constructor && obj.constructor.isBuffer && obj.constructor.isBuffer(obj));
-}
+};
 
-export function combine(a: any, b: any) {
+export var combine = function combine(a, b) {
     return [].concat(a, b);
-}
+};
 
-export function maybeMap(val: any, fn: any) {
+export var maybeMap = function maybeMap(val, fn) {
     if (isArray(val)) {
         var mapped = [];
         for (var i = 0; i < val.length; i += 1) {
@@ -231,4 +234,4 @@ export function maybeMap(val: any, fn: any) {
         return mapped;
     }
     return fn(val);
-}
+};
