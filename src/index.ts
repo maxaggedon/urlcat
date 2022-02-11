@@ -1,7 +1,7 @@
 import qs, { IStringifyOptions } from 'qs';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ParamMap = Record<string, any>;
+export type ParamMap = Record<string, string | boolean | number>;
 export type UrlCatConfiguration =
   Partial<Pick<IStringifyOptions, 'arrayFormat'> & { objectFormat: Partial<Pick<IStringifyOptions, 'format'>> }>
 
